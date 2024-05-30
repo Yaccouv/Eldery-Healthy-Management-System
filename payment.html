@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <div id="payment-form">
+        <!-- Elements will create input fields here -->
+    </div>
+    <button id="pay-button">Pay</button>
+
+    <script>
+    var stripe = Stripe('pk_test_51KdYapJTwcjF35OzSybWMrrTTSBRmZJlFD1N0BWM22mPl8XXZ8HKF1tzJhKHpOamsxDkfTXu3B6ju2V3C2mDq1U200ejlyLZUR');
+
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#payment-form');
+
+    var payButton = document.getElementById('pay-button');
+    payButton.addEventListener('click', function() {
+      stripe.createToken(cardElement).then(function(result) {
+        if (result.error) {
+          // Display error.message to user
+          console.error(result.error.message);
+        } else {
+          // Send result.token to your server to process payment
+          console.log(result.token);
+        }
+      });
+    });
+    </script>
+</body>
+</html>
